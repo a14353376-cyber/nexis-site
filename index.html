@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexis — Minecraft AutoClicker</title>
+    <style>
+        /* ── 기본 설정 ── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg:      #080a0d;
+            --surface: #0d1117;
+            --border:  #1a3a4a;
+            --teal:    #16d4e0;
+            --green:   #1af09a;
+            --red:     #f04a4a;
+            --text:    #d0e8f0;
+            --muted:   #4a6a78;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; }
+
+        /* ── 헤더 ── */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 48px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(8, 10, 13, 0.92);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+
+        .logo {
+            color: var(--teal);
+            font-size: 20px;
+            letter-spacing: 4px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: var(--muted);
+            margin-left: 32px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color .2s;
+        }
+
+        nav a:hover { color: var(--teal); }
+
+        /* ── 히어로 ── */
+        #hero {
+            text-align: center;
+            padding: 120px 24px 80px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            border: 1px solid var(--teal);
+            color: var(--teal);
+            font-size: 11px;
+            letter-spacing: 2px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+        }
+
+        #hero h1 {
+            font-size: 72px;
+            letter-spacing: 12px;
+            color: var(--teal);
+            margin-bottom: 16px;
+            text-shadow: 0 0 40px rgba(22, 212, 224, 0.3);
+        }
+
+        #hero p {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 48px;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: #000;
+            padding: 14px 36px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: inline-block;
+            transition: background .2s, box-shadow .2s;
+        }
+
+        .btn-primary:hover {
+            background: #20f0ff;
+            box-shadow: 0 0 20px rgba(22, 212, 224, 0.4);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 14px 36px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-left: 12px;
+            transition: border-color .2s, color .2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        /* ── 기능 섹션 ── */
+        #features {
+            padding: 80px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-label {
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px;
+            transition: border-color .2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--teal);
+        }
+
+        .feature-icon {
+            color: var(--teal);
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* ── 가격 섹션 ── */
+        #pricing {
+            padding: 80px 48px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .price-card {
+            display: inline-block;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 48px 64px;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--teal);
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 3px 14px;
+            border-radius: 10px;
+        }
+
+        .price-amount {
+            font-size: 48px;
+            color: var(--teal);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .price-desc {
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin: 24px 0 32px;
+            text-align: left;
+        }
+
+        .price-features li {
+            color: var(--text);
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .price-features li::before {
+            content: '>';
+            color: var(--teal);
+            margin-right: 10px;
+        }
+
+        /* ── 푸터 ── */
+        footer {
+            padding: 32px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer .logo { font-size: 14px; }
+
+        footer p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 -->
+    <header>
+        <div class="logo">NEXIS</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+        </nav>
+    </header>
+
+    <!-- 히어로 -->
+    <section id="hero">
+        <div class="hero-tag">MINECRAFT BEDROCK</div>
+        <h1>NEXIS</h1>
+        <p>Professional AutoClicker — Undetected</p>
+        <a href="#pricing" class="btn-primary">Get License</a>
+        <a href="#features" class="btn-outline">Learn More</a>
+    </section>
+
+    <!-- 기능 소개 -->
+    <section id="features">
+        <div class="section-label">// FEATURES</div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>Anti-Detection</h3>
+                <p>PEB 프로세스 위장으로 작업관리자에서 svchost.exe로 표시</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>Click Patterns</h3>
+                <p>Normal / Butter / Jitter / Drag 4가지 클릭 패턴 지원</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>CPS Control</h3>
+                <p>1~99 CPS 범위 설정, 랜덤 딜레이로 자연스러운 클릭</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>Hardware Detection</h3>
+                <p>실제 마우스 입력만 감지, 자기 클릭 재트리거 없음</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>Hotkey Hide</h3>
+                <p>단축키로 창 즉시 숨김, 작업표시줄에도 표시 안됨</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">></div>
+                <h3>License System</h3>
+                <p>실시간 서버 검증, HWID 바인딩으로 1기기 1라이센스</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 가격 -->
+    <section id="pricing">
+        <div class="section-label" style="margin-bottom:40px;">// PRICING</div>
+        <div class="price-card">
+            <div class="price-badge">LIFETIME</div>
+            <div class="price-amount">₩9,900</div>
+            <div class="price-desc">평생 라이센스 · 1기기</div>
+            <ul class="price-features">
+                <li>모든 클릭 패턴 포함</li>
+                <li>무료 업데이트</li>
+                <li>HWID 바인딩</li>
+                <li>즉시 발급</li>
+            </ul>
+            <a href="https://6278697828389.gumroad.com/l/wpupl" class="btn-primary">구매하기</a>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="logo">NEXIS</div>
+        <p>Copyright (C) A14353376. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
