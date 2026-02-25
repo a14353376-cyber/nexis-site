@@ -1,346 +1,535 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexis — Minecraft AutoClicker</title>
-    <style>
-        /* ── 기본 설정 ── */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXIS — AutoClicker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
 
-        :root {
-            --bg:      #080a0d;
-            --surface: #0d1117;
-            --border:  #1a3a4a;
-            --teal:    #16d4e0;
-            --green:   #1af09a;
-            --red:     #f04a4a;
-            --text:    #d0e8f0;
-            --muted:   #4a6a78;
-        }
+:root {
+  --bg:      #05070a;
+  --surface: #080c12;
+  --card:    #0a0f18;
+  --border:  #0e2030;
+  --teal:    #16d4e0;
+  --teal2:   #0e8a94;
+  --teal3:   #062830;
+  --green:   #1af09a;
+  --red:     #f04a4a;
+  --text:    #c0d8e8;
+  --muted:   #2a4a5a;
+  --muted2:  #4a7080;
+}
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Consolas', 'Courier New', monospace;
-            line-height: 1.6;
-        }
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Share Tech Mono',monospace;
+  overflow-x:hidden;
+}
 
-        a { text-decoration: none; }
+/* ── 배경 그리드 ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(14,42,60,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,42,60,0.15) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
 
-        /* ── 헤더 ── */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 48px;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            background: rgba(8, 10, 13, 0.92);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-        }
+/* ── 상단 글로우 ── */
+body::after{
+  content:'';
+  position:fixed;top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:400px;
+  background:radial-gradient(ellipse, rgba(22,212,224,0.06) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
 
-        .logo {
-            color: var(--teal);
-            font-size: 20px;
-            letter-spacing: 4px;
-            font-weight: bold;
-        }
+/* ── HEADER ── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 60px;
+  background:rgba(5,7,10,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Rajdhani',sans-serif;
+  color:var(--teal);font-size:22px;font-weight:700;
+  letter-spacing:8px;
+  text-shadow:0 0 20px rgba(22,212,224,0.4);
+}
+nav a{
+  color:var(--muted2);font-size:11px;letter-spacing:2px;
+  margin-left:32px;text-decoration:none;
+  transition:color .2s;
+}
+nav a:hover{color:var(--teal);}
 
-        nav a {
-            color: var(--muted);
-            margin-left: 32px;
-            font-size: 13px;
-            letter-spacing: 1px;
-            transition: color .2s;
-        }
+/* ── HERO ── */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:120px 24px 80px;
+  border-bottom:1px solid var(--border);
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--teal2);color:var(--teal);
+  font-size:10px;letter-spacing:3px;
+  padding:5px 16px;border-radius:2px;
+  margin-bottom:36px;
+  animation:fadeDown .8s ease both;
+}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(22,212,224,0.4);}50%{opacity:.6;box-shadow:0 0 0 6px transparent;}}
 
-        nav a:hover { color: var(--teal); }
+#hero h1{
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(72px,12vw,140px);
+  font-weight:700;letter-spacing:20px;
+  color:var(--teal);
+  text-shadow:0 0 60px rgba(22,212,224,0.25),0 0 120px rgba(22,212,224,0.1);
+  line-height:1;margin-bottom:20px;
+  animation:fadeDown .8s .1s ease both;
+}
+.hero-sub{
+  color:var(--muted2);font-size:13px;letter-spacing:4px;
+  margin-bottom:12px;
+  animation:fadeDown .8s .2s ease both;
+}
+.hero-ver{
+  color:var(--muted);font-size:10px;letter-spacing:2px;
+  margin-bottom:56px;
+  animation:fadeDown .8s .3s ease both;
+}
+.hero-btns{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  animation:fadeDown .8s .4s ease both;
+}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:none;}}
 
-        /* ── 히어로 ── */
-        #hero {
-            text-align: center;
-            padding: 120px 24px 80px;
-            border-bottom: 1px solid var(--border);
-        }
+.btn-primary{
+  background:var(--teal);color:#000;
+  padding:13px 36px;border-radius:3px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:13px;font-weight:bold;letter-spacing:2px;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:background .2s,box-shadow .2s,transform .1s;
+  display:inline-block;
+}
+.btn-primary:hover{background:#20f0ff;box-shadow:0 0 30px rgba(22,212,224,0.4);transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(0);}
 
-        .hero-tag {
-            display: inline-block;
-            border: 1px solid var(--teal);
-            color: var(--teal);
-            font-size: 11px;
-            letter-spacing: 2px;
-            padding: 4px 14px;
-            border-radius: 20px;
-            margin-bottom: 28px;
-        }
+.btn-outline{
+  border:1px solid var(--border);color:var(--muted2);
+  padding:13px 36px;border-radius:3px;
+  font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:2px;
+  text-decoration:none;
+  transition:border-color .2s,color .2s;
+  display:inline-block;
+}
+.btn-outline:hover{border-color:var(--teal2);color:var(--teal);}
 
-        #hero h1 {
-            font-size: 72px;
-            letter-spacing: 12px;
-            color: var(--teal);
-            margin-bottom: 16px;
-            text-shadow: 0 0 40px rgba(22, 212, 224, 0.3);
-        }
+/* ── SECTION ── */
+section{position:relative;z-index:1;}
+.sec-label{
+  color:var(--muted);font-size:10px;letter-spacing:3px;
+  margin-bottom:48px;display:flex;align-items:center;gap:12px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
-        #hero p {
-            color: var(--muted);
-            font-size: 16px;
-            margin-bottom: 48px;
-            letter-spacing: 2px;
-        }
+/* ── FEATURES ── */
+#features{padding:100px 60px;border-bottom:1px solid var(--border);}
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+.feature-card{
+  background:var(--card);
+  padding:32px 28px;
+  transition:background .2s;
+  position:relative;
+  overflow:hidden;
+}
+.feature-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.feature-card:hover{background:#0c1420;}
+.feature-card:hover::before{opacity:1;}
+.fc-num{
+  color:var(--muted);font-size:10px;letter-spacing:2px;
+  margin-bottom:16px;
+}
+.fc-title{
+  font-family:'Rajdhani',sans-serif;
+  color:var(--teal);font-size:16px;font-weight:600;
+  letter-spacing:2px;margin-bottom:10px;
+}
+.fc-desc{color:var(--muted2);font-size:12px;line-height:1.8;}
+.fc-badge{
+  display:inline-block;margin-top:12px;
+  border:1px solid var(--teal3);color:var(--teal2);
+  font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:2px;
+}
 
-        .btn-primary {
-            background: var(--teal);
-            color: #000;
-            padding: 14px 36px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            display: inline-block;
-            transition: background .2s, box-shadow .2s;
-        }
+/* ── BYPASS ── */
+#bypass{
+  padding:80px 60px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,transparent,rgba(22,212,224,0.02),transparent);
+}
+.bypass-wrap{
+  border:1px solid var(--teal3);
+  border-radius:4px;padding:40px 48px;
+  position:relative;
+  background:rgba(6,40,48,0.2);
+}
+.bypass-wrap::before{
+  content:'CLASSIFIED';
+  position:absolute;top:-10px;left:32px;
+  background:var(--bg);
+  color:var(--teal2);font-size:9px;letter-spacing:3px;
+  padding:0 12px;
+}
+.bypass-content{display:flex;align-items:center;gap:48px;flex-wrap:wrap;}
+.bypass-icon{
+  font-family:'Rajdhani',sans-serif;
+  font-size:72px;font-weight:700;
+  color:var(--teal3);
+  line-height:1;flex-shrink:0;
+  text-shadow:0 0 40px rgba(22,212,224,0.1);
+}
+.bypass-text h3{
+  font-family:'Rajdhani',sans-serif;
+  color:var(--teal);font-size:22px;font-weight:600;
+  letter-spacing:3px;margin-bottom:12px;
+}
+.bypass-text p{color:var(--muted2);font-size:13px;line-height:1.9;max-width:480px;}
+.bypass-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.bypass-tag{
+  border:1px solid var(--border);color:var(--muted2);
+  font-size:10px;letter-spacing:1px;padding:3px 10px;
+  border-radius:2px;
+}
 
-        .btn-primary:hover {
-            background: #20f0ff;
-            box-shadow: 0 0 20px rgba(22, 212, 224, 0.4);
-        }
+/* ── PRICING ── */
+#pricing{
+  padding:100px 60px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.price-card{
+  display:inline-block;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:56px 72px;
+  min-width:320px;
+  position:relative;
+  transition:border-color .3s,box-shadow .3s;
+}
+.price-card:hover{
+  border-color:var(--teal2);
+  box-shadow:0 0 60px rgba(22,212,224,0.08);
+}
+.price-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--teal);color:#000;
+  font-size:9px;font-weight:bold;letter-spacing:3px;
+  padding:4px 18px;border-radius:2px;
+  white-space:nowrap;
+}
+.price-amount{
+  font-family:'Rajdhani',sans-serif;
+  font-size:72px;font-weight:700;
+  color:var(--teal);letter-spacing:2px;
+  line-height:1;margin-bottom:4px;
+  text-shadow:0 0 40px rgba(22,212,224,0.2);
+}
+.price-unit{font-size:13px;color:var(--muted2);letter-spacing:2px;margin-bottom:32px;}
+.price-features{list-style:none;margin-bottom:36px;text-align:left;}
+.price-features li{
+  color:var(--text);font-size:12px;
+  padding:8px 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.price-features li::before{content:'>';color:var(--teal);}
 
-        .btn-outline {
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 14px 36px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 14px;
-            letter-spacing: 1px;
-            display: inline-block;
-            margin-left: 12px;
-            transition: border-color .2s, color .2s;
-        }
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--card);
+  border:1px solid var(--teal2);
+  border-radius:6px;
+  padding:40px 48px;
+  max-width:440px;width:90%;
+  position:relative;
+  animation:modalIn .25s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:none;}}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:var(--muted2);
+  font-size:18px;cursor:pointer;
+  font-family:monospace;
+  transition:color .2s;
+}
+.modal-close:hover{color:var(--teal);}
+.modal h3{
+  font-family:'Rajdhani',sans-serif;
+  color:var(--teal);font-size:20px;font-weight:600;
+  letter-spacing:3px;margin-bottom:8px;
+}
+.modal .price-tag{
+  font-family:'Rajdhani',sans-serif;
+  font-size:42px;font-weight:700;color:var(--teal);
+  margin-bottom:24px;
+  text-shadow:0 0 30px rgba(22,212,224,0.2);
+}
+.modal p{color:var(--muted2);font-size:12px;line-height:1.9;margin-bottom:24px;}
+.discord-box{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:14px 18px;
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.discord-icon{color:#5865f2;font-size:20px;}
+.discord-id{color:var(--teal);letter-spacing:1px;font-size:14px;}
+.modal-note{
+  color:var(--muted);font-size:10px;letter-spacing:1px;
+  text-align:center;
+}
+.copy-btn{
+  background:none;border:1px solid var(--border);
+  color:var(--muted2);font-family:monospace;font-size:10px;
+  padding:3px 10px;border-radius:2px;cursor:pointer;
+  margin-left:auto;transition:border-color .2s,color .2s;
+}
+.copy-btn:hover{border-color:var(--teal2);color:var(--teal);}
+.copy-btn.copied{border-color:var(--green);color:var(--green);}
 
-        .btn-outline:hover {
-            border-color: var(--teal);
-            color: var(--teal);
-        }
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;
+  padding:28px 60px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--border);
+}
+footer .logo{font-size:14px;letter-spacing:6px;}
+footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
 
-        /* ── 기능 섹션 ── */
-        #features {
-            padding: 80px 48px;
-            border-bottom: 1px solid var(--border);
-        }
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:none;}
 
-        .section-label {
-            color: var(--muted);
-            font-size: 11px;
-            letter-spacing: 3px;
-            margin-bottom: 40px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 24px;
-            transition: border-color .2s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--teal);
-        }
-
-        .feature-icon {
-            color: var(--teal);
-            font-size: 20px;
-            margin-bottom: 12px;
-        }
-
-        .feature-card h3 {
-            color: var(--text);
-            font-size: 14px;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .feature-card p {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.7;
-        }
-
-        /* ── 가격 섹션 ── */
-        #pricing {
-            padding: 80px 48px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .price-card {
-            display: inline-block;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 48px 64px;
-            min-width: 300px;
-            position: relative;
-        }
-
-        .price-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--teal);
-            color: #000;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            padding: 3px 14px;
-            border-radius: 10px;
-        }
-
-        .price-amount {
-            font-size: 48px;
-            color: var(--teal);
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .price-desc {
-            color: var(--muted);
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .price-features {
-            list-style: none;
-            margin: 24px 0 32px;
-            text-align: left;
-        }
-
-        .price-features li {
-            color: var(--text);
-            font-size: 13px;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .price-features li::before {
-            content: '>';
-            color: var(--teal);
-            margin-right: 10px;
-        }
-
-        /* ── 푸터 ── */
-        footer {
-            padding: 32px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        footer .logo { font-size: 14px; }
-
-        footer p {
-            color: var(--muted);
-            font-size: 12px;
-        }
-    </style>
+@media(max-width:640px){
+  header{padding:14px 20px;}
+  #hero h1{letter-spacing:8px;}
+  #features,#bypass,#pricing{padding:60px 20px;}
+  .bypass-content{flex-direction:column;gap:24px;}
+  .bypass-icon{font-size:48px;}
+  footer{flex-direction:column;gap:8px;text-align:center;}
+}
+</style>
 </head>
 <body>
 
-    <!-- 헤더 -->
-    <header>
-        <div class="logo">NEXIS</div>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-        </nav>
-    </header>
+<!-- HEADER -->
+<header>
+  <div class="logo">NEXIS</div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#bypass">Bypass</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+</header>
 
-    <!-- 히어로 -->
-    <section id="hero">
-        <div class="hero-tag">MINECRAFT BEDROCK</div>
-        <h1>NEXIS</h1>
-        <p>Professional AutoClicker — Undetected</p>
-        <a href="#pricing" class="btn-primary">Get License</a>
-        <a href="#features" class="btn-outline">Learn More</a>
-    </section>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag"><span></span>AutoClicker</div>
+  <h1>NEXIS</h1>
+  <div class="hero-sub">Professional AutoClicker — Undetected</div>
+  <div class="hero-ver">v1.2 &nbsp;·&nbsp; Windows 10/11 &nbsp;·&nbsp; x64</div>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="openModal()">구매하기</button>
+    <a href="#features" class="btn-outline">Learn More</a>
+  </div>
+</section>
 
-    <!-- 기능 소개 -->
-    <section id="features">
-        <div class="section-label">// FEATURES</div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>Anti-Detection</h3>
-                <p>PEB 프로세스 위장으로 작업관리자에서 svchost.exe로 표시</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>Click Patterns</h3>
-                <p>Normal / Butter / Jitter / Drag 4가지 클릭 패턴 지원</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>CPS Control</h3>
-                <p>1~99 CPS 범위 설정, 랜덤 딜레이로 자연스러운 클릭</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>Hardware Detection</h3>
-                <p>실제 마우스 입력만 감지, 자기 클릭 재트리거 없음</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>Hotkey Hide</h3>
-                <p>단축키로 창 즉시 숨김, 작업표시줄에도 표시 안됨</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">></div>
-                <h3>License System</h3>
-                <p>실시간 서버 검증, HWID 바인딩으로 1기기 1라이센스</p>
-            </div>
+<!-- FEATURES -->
+<section id="features">
+  <div class="sec-label">// FEATURES</div>
+  <div class="features-grid reveal">
+
+    <div class="feature-card">
+      <div class="fc-num">01</div>
+      <div class="fc-title">CPS CONTROL</div>
+      <div class="fc-desc">Min / Max CPS 범위 설정으로 자연스러운 랜덤 클릭 속도 구현. 가우시안 분포 타이밍 적용.</div>
+      <span class="fc-badge">8 ~ 99 CPS</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="fc-num">02</div>
+      <div class="fc-title">CLICK PATTERNS</div>
+      <div class="fc-desc">Normal · Butter · Jitter · Drag 4가지 패턴 지원. Double Click 확률(%) 설정으로 더블클릭 삽입.</div>
+      <span class="fc-badge">4 PATTERNS</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="fc-num">03</div>
+      <div class="fc-title">CAPTURE HIDE</div>
+      <div class="fc-desc">OBS · Discord 화면공유에서 창이 완전히 안 보임. DXGI + BitBlt 두 캡처 방식 모두 차단.</div>
+      <span class="fc-badge">OBS / DISCORD</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="fc-num">04</div>
+      <div class="fc-title">WINDOW STEALTH</div>
+      <div class="fc-desc">작업표시줄 · Alt+Tab 목록에서 완전 제거. 단축키로 창 즉시 숨김 / 복원 가능.</div>
+      <span class="fc-badge">INVISIBLE</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="fc-num">05</div>
+      <div class="fc-title">KEY BINDINGS</div>
+      <div class="fc-desc">Toggle AutoClick · Hide Window · Capture Hide 모든 단축키를 자유롭게 변경 가능.</div>
+      <span class="fc-badge">FULLY CUSTOM</span>
+    </div>
+
+    <div class="feature-card">
+      <div class="fc-num">06</div>
+      <div class="fc-title">LICENSE SYSTEM</div>
+      <div class="fc-desc">실시간 서버 인증 + HWID 바인딩. 1기기 1라이선스. 기간제 / 무기한 모두 지원.</div>
+      <span class="fc-badge">HWID BOUND</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- BYPASS -->
+<section id="bypass">
+  <div class="sec-label">// BYPASS</div>
+  <div class="bypass-wrap reveal">
+    <div class="bypass-content">
+      <div class="bypass-icon">&#x1F6E1;</div>
+      <div class="bypass-text">
+        <h3>ANTI-DETECTION</h3>
+        <p>다수의 우회 기법이 적용되어 있습니다. 유출 방지를 위해 세부 기술 내용은 공개하지 않습니다.</p>
+        <div class="bypass-tags">
+          <span class="bypass-tag">PROCESS MASKING</span>
+          <span class="bypass-tag">TIMING RANDOMIZE</span>
+          <span class="bypass-tag">ANTI-ANALYSIS</span>
+          <span class="bypass-tag">DRIVER DETECTION</span>
+          <span class="bypass-tag">CONFIDENTIAL</span>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 가격 -->
-    <section id="pricing">
-        <div class="section-label" style="margin-bottom:40px;">// PRICING</div>
-        <div class="price-card">
-            <div class="price-badge">LIFETIME</div>
-            <div class="price-amount">₩9,900</div>
-            <div class="price-desc">평생 라이센스 · 1기기</div>
-            <ul class="price-features">
-                <li>모든 클릭 패턴 포함</li>
-                <li>무료 업데이트</li>
-                <li>HWID 바인딩</li>
-                <li>즉시 발급</li>
-            </ul>
-            <a href="https://6278697828389.gumroad.com/l/wpupl" class="btn-primary">구매하기</a>
-        </div>
-    </section>
+<!-- PRICING -->
+<section id="pricing">
+  <div class="sec-label">// PRICING</div>
+  <div class="price-card reveal">
+    <div class="price-badge">LIFETIME LICENSE</div>
+    <div class="price-amount">₩3.5</div>
+    <div class="price-unit">USD · 평생 라이선스 · 1기기</div>
+    <ul class="price-features">
+      <li>모든 클릭 패턴 포함</li>
+      <li>Capture Hide (OBS · Discord)</li>
+      <li>Bypass 기능 포함</li>
+      <li>단축키 자유 설정</li>
+      <li>HWID 바인딩</li>
+      <li>업데이트 무료 제공</li>
+    </ul>
+    <button class="btn-primary" style="width:100%;" onclick="openModal()">구매하기</button>
+  </div>
+</section>
 
-    <!-- 푸터 -->
-    <footer>
-        <div class="logo">NEXIS</div>
-        <p>Copyright (C) A14353376. All rights reserved.</p>
-    </footer>
+<!-- FOOTER -->
+<footer>
+  <div class="logo">NEXIS</div>
+  <p>© 2026 A14353376 · All rights reserved.</p>
+</footer>
 
+<!-- PURCHASE MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>PURCHASE</h3>
+    <div class="price-tag">₩3.5</div>
+    <p>구매 문의는 아래 디스코드로 연락해주세요.<br>확인 후 라이선스 키를 발급해 드립니다.</p>
+    <div class="discord-box">
+      <span class="discord-icon">⬡</span>
+      <span class="discord-id">a14353376</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyDiscord()">COPY</button>
+    </div>
+    <div class="modal-note">Discord 친추 또는 DM으로 문의하세요.</div>
+  </div>
+</div>
+
+<script>
+// Modal
+function openModal(){
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e){
+  if(e.target===document.getElementById('modal')) closeModal();
+}
+
+// Copy Discord ID
+function copyDiscord(){
+  navigator.clipboard.writeText('a14353376').then(()=>{
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='COPIED';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('copied');},2000);
+  });
+}
+
+// ESC to close
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
