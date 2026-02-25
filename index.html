@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXIS — AutoClicker</title>
+<title>NEXIS — Minecraft AutoClicker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
 
@@ -239,42 +239,78 @@ section{position:relative;z-index:1;}
   border-bottom:1px solid var(--border);
   text-align:center;
 }
-.price-card{
-  display:inline-block;
+.plans-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  max-width:1000px;
+  margin:0 auto;
+}
+.plan-card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:6px;
-  padding:56px 72px;
-  min-width:320px;
+  padding:36px 28px;
   position:relative;
-  transition:border-color .3s,box-shadow .3s;
+  transition:border-color .3s,box-shadow .3s,transform .2s;
+  text-align:left;
+  cursor:pointer;
 }
-.price-card:hover{
+.plan-card:hover{
   border-color:var(--teal2);
-  box-shadow:0 0 60px rgba(22,212,224,0.08);
+  box-shadow:0 0 40px rgba(22,212,224,0.07);
+  transform:translateY(-3px);
 }
-.price-badge{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+.plan-card.featured{
+  border-color:var(--teal2);
+  background:linear-gradient(135deg,#0a1520,#0c1a28);
+}
+.plan-card.featured:hover{
+  box-shadow:0 0 60px rgba(22,212,224,0.14);
+}
+.plan-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
   background:var(--teal);color:#000;
   font-size:9px;font-weight:bold;letter-spacing:3px;
-  padding:4px 18px;border-radius:2px;
+  padding:3px 14px;border-radius:2px;
   white-space:nowrap;
 }
-.price-amount{
+.plan-period{
   font-family:'Rajdhani',sans-serif;
-  font-size:72px;font-weight:700;
-  color:var(--teal);letter-spacing:2px;
-  line-height:1;margin-bottom:4px;
-  text-shadow:0 0 40px rgba(22,212,224,0.2);
+  color:var(--muted2);font-size:11px;letter-spacing:3px;
+  margin-bottom:12px;
 }
-.price-unit{font-size:13px;color:var(--muted2);letter-spacing:2px;margin-bottom:32px;}
-.price-features{list-style:none;margin-bottom:36px;text-align:left;}
-.price-features li{
-  color:var(--text);font-size:12px;
-  padding:8px 0;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
+.plan-price{
+  font-family:'Rajdhani',sans-serif;
+  font-size:52px;font-weight:700;
+  color:var(--teal);line-height:1;
+  margin-bottom:4px;
+  text-shadow:0 0 30px rgba(22,212,224,0.2);
 }
-.price-features li::before{content:'>';color:var(--teal);}
+.plan-price sup{font-size:22px;vertical-align:top;margin-top:10px;display:inline-block;}
+.plan-desc{color:var(--muted2);font-size:11px;letter-spacing:1px;margin-bottom:24px;}
+.plan-features{list-style:none;margin-bottom:28px;}
+.plan-features li{
+  color:var(--text);font-size:11px;
+  padding:6px 0;border-bottom:1px solid #0a1820;
+  display:flex;align-items:center;gap:8px;
+}
+.plan-features li::before{content:'›';color:var(--teal);font-size:14px;}
+.plan-features li.dim{color:var(--muted);}
+.plan-features li.dim::before{color:var(--muted);}
+.plan-btn{
+  width:100%;background:var(--teal);color:#000;
+  padding:11px;border:none;border-radius:3px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;font-weight:bold;letter-spacing:2px;
+  cursor:pointer;transition:background .2s,box-shadow .2s;
+}
+.plan-btn:hover{background:#20f0ff;box-shadow:0 0 20px rgba(22,212,224,0.3);}
+.plan-btn.outline{
+  background:transparent;color:var(--teal2);
+  border:1px solid var(--teal3);
+}
+.plan-btn.outline:hover{background:var(--teal3);box-shadow:none;}
 
 /* ── MODAL ── */
 .modal-overlay{
@@ -376,7 +412,7 @@ footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-tag"><span></span>AutoClicker</div>
+  <div class="hero-tag"><span></span>MINECRAFT BEDROCK</div>
   <h1>NEXIS</h1>
   <div class="hero-sub">Professional AutoClicker — Undetected</div>
   <div class="hero-ver">v1.2 &nbsp;·&nbsp; Windows 10/11 &nbsp;·&nbsp; x64</div>
@@ -444,7 +480,7 @@ footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
       <div class="bypass-icon">&#x1F6E1;</div>
       <div class="bypass-text">
         <h3>ANTI-DETECTION</h3>
-        <p>다수의 우회 기법이 적용되어 있습니다. 유출 방지를 위해 세부 기술 내용은 공개하지 않습니다.</p>
+        <p>다수의 우회 기법이 적용되어 있습니다. 유출 방지를 위해 세부 기술 내용은 공개하지 않습니다. 주요 안티치트 환경에서 정상 동작을 확인하였습니다.</p>
         <div class="bypass-tags">
           <span class="bypass-tag">PROCESS MASKING</span>
           <span class="bypass-tag">TIMING RANDOMIZE</span>
@@ -460,19 +496,37 @@ footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
 <!-- PRICING -->
 <section id="pricing">
   <div class="sec-label">// PRICING</div>
-  <div class="price-card reveal">
-    <div class="price-badge">LIFETIME LICENSE</div>
-    <div class="price-amount">₩3.5</div>
-    <div class="price-unit">USD · 평생 라이선스 · 1기기</div>
-    <ul class="price-features">
-      <li>모든 클릭 패턴 포함</li>
-      <li>Capture Hide (OBS · Discord)</li>
-      <li>Bypass 기능 포함</li>
-      <li>단축키 자유 설정</li>
-      <li>HWID 바인딩</li>
-      <li>업데이트 무료 제공</li>
-    </ul>
-    <button class="btn-primary" style="width:100%;" onclick="openModal()">구매하기</button>
+  <div class="plans-grid reveal">
+
+    <!-- 3일 -->
+    <div class="plan-card" onclick="openModal('₩0.8','3일')">
+      <div class="plan-period">3-DAY</div>
+      <div class="plan-price"><sup>₩</sup>0.8</div>
+      <button class="plan-btn outline">구매하기</button>
+    </div>
+
+    <!-- 7일 -->
+    <div class="plan-card" onclick="openModal('₩1.5','7일')">
+      <div class="plan-period">7-DAY</div>
+      <div class="plan-price"><sup>₩</sup>1.5</div>
+      <button class="plan-btn outline">구매하기</button>
+    </div>
+
+    <!-- 30일 -->
+    <div class="plan-card" onclick="openModal('₩2.5','30일')">
+      <div class="plan-period">30-DAY</div>
+      <div class="plan-price"><sup>₩</sup>2.5</div>
+      <button class="plan-btn outline">구매하기</button>
+    </div>
+
+    <!-- 영구 -->
+    <div class="plan-card featured" onclick="openModal('₩5.0','영구')">
+      <div class="plan-badge">BEST VALUE</div>
+      <div class="plan-period">LIFETIME</div>
+      <div class="plan-price"><sup>₩</sup>3.5</div>
+      <button class="plan-btn">구매하기</button>
+    </div>
+
   </div>
 </section>
 
@@ -487,7 +541,8 @@ footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h3>PURCHASE</h3>
-    <div class="price-tag">₩3.5</div>
+    <div class="price-tag" id="modalPrice">₩3.5</div>
+    <div style="color:var(--muted2);font-size:11px;letter-spacing:2px;margin-bottom:16px;" id="modalPlan">영구 라이선스</div>
     <p>구매 문의는 아래 디스코드로 연락해주세요.<br>확인 후 라이선스 키를 발급해 드립니다.</p>
     <div class="discord-box">
       <span class="discord-icon">⬡</span>
@@ -500,7 +555,9 @@ footer p{color:var(--muted);font-size:10px;letter-spacing:1px;}
 
 <script>
 // Modal
-function openModal(){
+function openModal(price, plan){
+  if(price) document.getElementById('modalPrice').textContent = price;
+  if(plan)  document.getElementById('modalPlan').textContent  = plan + ' 라이선스';
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow='hidden';
 }
